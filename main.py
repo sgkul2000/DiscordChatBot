@@ -4,13 +4,13 @@ from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
 from discord.ext.commands import Bot
 import random
-from textblob import TextBlob
 from commands.main import *
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 import re
 import html
 
+	
 TOKEN = environ['DISCORD']
 
 client = discord.Client()
@@ -23,10 +23,12 @@ trainer = ChatterBotCorpusTrainer(chatbot)
 # Train the chatbot based on the english corpus
 trainer.train("chatterbot.corpus.english")
 
+
 @client.event
 async def on_ready():
 	print(f'{client.user} has connected')
-	await client.change_presence(activity=discord.Streaming(name="your mom", url="https://www.twitch.tv/shroud"), status=discord.Status.idle)
+	await client.change_presence(activity=discord.Streaming(name="your mom!", game="Strawberry flavour🍓", url="https://www.twitch.tv/shroud", twitch_name="cruelKarni"), status=discord.Status.idle)
+
 
 @client.event
 async def on_member_join(member):
@@ -70,5 +72,7 @@ async def on_message(message):
 			await message.add_reaction('🇺')
 			response = random.choice(comebacks).strip()
 			await message.channel.send("Hey "+str(message.author.mention)+", "+response) 
-
 client.run(TOKEN)
+
+
+

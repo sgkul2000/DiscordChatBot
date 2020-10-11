@@ -17,9 +17,6 @@ spec:
           image: codekulkarni/discord-chatbot
           ports:
             - containerPort: 3000
-          env:
-            - name: DISCORD
-              value: "NzYxODg2MzA2MDQ5NDU4MjA3.X3hH6g.mAsCdFfR2IGl1MJiNF0DjmOS450"
 
 ---
 # apiVersion: v1
