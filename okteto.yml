@@ -1,0 +1,13 @@
+name: discordchatbot
+image: okteto/python:3
+command: bash
+volumes:
+  - /root/.cache/pip
+environment:
+  - DISCORD=NzYxODg2MzA2MDQ5NDU4MjA3.X3hH6g.mAsCdFfR2IGl1MJiNF0DjmOS450
+sync:
+  - .:/usr/src/app
+forward:
+  - 8080:8080
+reverse:
+  - 9000:9000

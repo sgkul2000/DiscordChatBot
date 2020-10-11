@@ -2,12 +2,14 @@ from os import environ
 import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
+from discord.ext.commands import Bot
 import random
 from textblob import TextBlob
 from commands.main import *
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 import re
+import html
 
 TOKEN = environ['DISCORD']
 
@@ -24,6 +26,7 @@ trainer.train("chatterbot.corpus.english")
 @client.event
 async def on_ready():
 	print(f'{client.user} has connected')
+	await client.change_presence(activity=discord.Streaming(name="your mom", url="https://www.twitch.tv/shroud"), status=discord.Status.idle)
 
 @client.event
 async def on_member_join(member):
@@ -43,14 +46,14 @@ async def on_message(message):
 	if msg.startswith('!'):
 		response = getCommandResponse(msg, message, client)
 		await message.delete()
-		if(type(response == discord.Embed)):
+		if(type(response) == discord.Embed):
 			newmessage = await message.channel.send(embed=response)
 			await newmessage.delete(delay=20)
 		elif type(response)==list:
 			await message.channel.send(response[0], tts=tts)
 			await message.channel.send(response[1], tts=tts)
 		else:
-			await message.channel.send(response, tts=tts)
+			await message.channel.send(html.unescape(response), tts=tts)
 	elif client.user in message.mentions:
 		choice = random.choice([1,2])
 		print(message.mentions)

@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discord-chatbot
+spec:
+  selector:
+    matchLabels:
+      app: discord-chatbot
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: discord-chatbot
+    spec:
+      containers:
+        - name: discord-chatbot
+          image: codekulkarni/discord-chatbot
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DISCORD
+              value: "NzYxODg2MzA2MDQ5NDU4MjA3.X3hH6g.mAsCdFfR2IGl1MJiNF0DjmOS450"
+
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: dk-test
+#   labels:
+#     name: dk-test
+# spec:
+#   type: NodePort
+#   ports:
+#     - port: 3000
+#       nodePort: null
+#       targetPort: 3000
+#       name: http
+#   selector:
+#     name: dk-test
+
+# ---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: main
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  selector:
+    app: discord-chatbot
