@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: discord-chatbot
+  labels:
+    app: discord-chatbot
 spec:
   selector:
     matchLabels:
@@ -15,39 +17,57 @@ spec:
       containers:
         - name: discord-chatbot
           image: codekulkarni/discord-chatbot
+          imagePullPolicy: Always
+          env:
+            - name: DISCORD
+              value: 'NzYxODg2MzA2MDQ5NDU4MjA3.X3hH6g.7wvjBWviiCU4dcYQZ5Xr-QCJCQU'
           ports:
             - containerPort: 3000
 
 ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: dk-test
-#   labels:
-#     name: dk-test
-# spec:
-#   type: NodePort
-#   ports:
-#     - port: 3000
-#       nodePort: null
-#       targetPort: 3000
-#       name: http
-#   selector:
-#     name: dk-test
-
-# ---
-
 apiVersion: v1
 kind: Service
 metadata:
-  name: main
-  annotations:
-    dev.okteto.com/auto-ingress: "true"
+  name: discord-chatbot
+  labels:
+    app: discord-chatbot
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-    - protocol: TCP
+    - protocol: 'TCP'
       port: 80
       targetPort: 3000
+      name: http
   selector:
     app: discord-chatbot
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: discord-chatbot
+#   labels:
+#     app: discord-chatbot
+# spec:
+#   type: ClusterIP
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 3000
+#       name: http
+#   selector:
+#     app: discord-chatbot
+
+# ---
+# apiVersion: networking.k8s.io/v1beta1
+# kind: Ingress
+# metadata:
+#   name: discord-chatbot
+# spec:
+#   rules:
+#     - host: sgkul2000.cloud.okteto.net
+#       http:
+#         paths:
+#           - path: /
+#             backend:
+#               serviceName: discord-chatbot
+#               servicePort: 80
